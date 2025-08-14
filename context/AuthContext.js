@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         // In a real app, you'd check with your backend API
         // For now, we'll check if there's user data in memory or a token
         const savedUser = typeof window !== 'undefined' ? 
-          JSON.parse(sessionStorage.getItem('servicehub_user') || 'null') : null
+          JSON.parse(sessionStorage.getItem('ReachHub_user') || 'null') : null
         
         if (savedUser) {
           setUser(savedUser)
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
         console.error('Auth check failed:', error)
         // Clear any corrupted data
         if (typeof window !== 'undefined') {
-          sessionStorage.removeItem('servicehub_user')
+          sessionStorage.removeItem('ReachHub_user')
         }
       } finally {
         setLoading(false)
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
       
       // Store in sessionStorage (in real app, handle tokens properly)
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem('servicehub_user', JSON.stringify(userData))
+        sessionStorage.setItem('ReachHub_user', JSON.stringify(userData))
       }
 
       return { success: true, user: userData }
@@ -110,7 +110,7 @@ export const AuthProvider = ({ children }) => {
       
       // Store in sessionStorage
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem('servicehub_user', JSON.stringify(newUser))
+        sessionStorage.setItem('ReachHub_user', JSON.stringify(newUser))
       }
 
       return { success: true, user: newUser }
@@ -128,7 +128,7 @@ export const AuthProvider = ({ children }) => {
     
     // Clear stored data
     if (typeof window !== 'undefined') {
-      sessionStorage.removeItem('servicehub_user')
+      sessionStorage.removeItem('ReachHub_user')
     }
   }
 
@@ -144,7 +144,7 @@ export const AuthProvider = ({ children }) => {
       
       // Update stored data
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem('servicehub_user', JSON.stringify(updatedUser))
+        sessionStorage.setItem('ReachHub_user', JSON.stringify(updatedUser))
       }
 
       return { success: true, user: updatedUser }

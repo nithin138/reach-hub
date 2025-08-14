@@ -21,7 +21,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0">
-              <span className="text-2xl font-bold text-primary-600">ServiceHub</span>
+              <span className="text-2xl font-bold text-primary-600">ReachHub</span>
             </Link>
           </div>
 

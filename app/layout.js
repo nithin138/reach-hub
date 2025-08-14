@@ -1,24 +1,27 @@
+'use client'
+
 import './globals.css'
 import { AuthProvider } from '../context/AuthContext'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { usePathname } from 'next/navigation'
 
-export const metadata = {
-  title: 'ServiceHub - Connect with Local Service Providers',
-  description: 'Find trusted local service providers or offer your services to customers in your area.',
-}
+
 
 export default function RootLayout({ children }) {
+  const pathname = usePathname()
+  console.log('Current Path:', pathname)
+  const hideLayout = pathname?.startsWith('/auth/login') || pathname?.startsWith('/auth/register')
+console.log('Hide Layout:', hideLayout)
+
   return (
     <html lang="en">
-      <body className="min-h-screen ">
+      <body className="min-h-screen">
         <AuthProvider>
           <div className="flex flex-col min-h-screen">
-            <Navbar />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
+            {!hideLayout && <Navbar />}
+            <main className="flex-1">{children}</main>
+            {!hideLayout && <Footer />}
           </div>
         </AuthProvider>
       </body>

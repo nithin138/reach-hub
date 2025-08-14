@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 export default function RegisterPage() {
@@ -8,211 +7,133 @@ export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    confirmPassword: '',
-    userType: 'user',
     phone: '',
-    location: ''
+    type: '',
+    password: '',
+    confirmPassword: ''
   })
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true)
-    setError('')
+  const fields = [
+    { name: 'name', label: 'Full Name', type: 'text' },
+    { name: 'email', label: 'Email address', type: 'email' },
+    { name: 'phone', label: 'Phone Number', type: 'tel' },
+    { name: 'password', label: 'Password', type: 'password' },
+    { name: 'confirmPassword', label: 'Confirm Password', type: 'password' }
+  ]
 
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match')
-      setLoading(false)
-      return
-    }
-
-    try {
-      // In real app, this would make an API call
-      console.log('Registering user:', formData)
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Redirect to login
-      router.push('/auth/login')
-    } catch (error) {
-      setError('Registration failed. Please try again.')
-    } finally {
-      setLoading(false)
-    }
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    console.log('Register form data:', formData)
+    router.push('/login')
+  }
+  const inputClass = "mt-1 block w-full rounded-md border border-white/30 bg-white/20 px-3 py-2 text-white placeholder-gray-200 shadow-sm focus:border-pink-400 focus:ring-pink-400 focus:outline-none backdrop-blur-sm";
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 px-4">
+      <div className="w-full max-w-2xl rounded-2xl bg-white/10 p-8 shadow-lg backdrop-blur-lg border border-white/20">
+        <h2 className="text-center text-3xl font-bold text-white drop-shadow-lg">
           Create your account
         </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Already have an account?{' '}
-          <Link href="/auth/login" className="font-medium text-primary-600 hover:text-primary-500">
-            Sign in here
-          </Link>
-        </p>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-                {error}
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          {/* Radio button for type */}
+          <div>
+            <label className="block text-sm font-medium text-white">Account Type</label>
+            <div className="mt-2 flex gap-6">
+              <label className="flex items-center text-white">
+                <input
+                  type="radio"
+                  name="type"
+                  value="customer"
+                  checked={formData.type === 'customer'}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-pink-500 focus:ring-pink-400 border-gray-300"
+                  required
+                />
+                <span className="ml-2">Customer</span>
+              </label>
+              <label className="flex items-center text-white">
+                <input
+                  type="radio"
+                  name="type"
+                  value="service_provider"
+                  checked={formData.type === 'service_provider'}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-pink-500 focus:ring-pink-400 border-gray-300"
+                  required
+                />
+                <span className="ml-2">Service Provider</span>
+              </label>
+            </div>
+          </div>
+          <div className="space-y-6">
+            {/* Full-width Name field */}
+            {fields.length > 0 && (
+              <div>
+                <label htmlFor={fields[0].name} className="block text-sm font-medium text-white">
+                  {fields[0].label}
+                </label>
+                <input
+                  id={fields[0].name}
+                  name={fields[0].name}
+                  type={fields[0].type}
+                  value={formData[fields[0].name]}
+                  onChange={handleChange}
+                  required
+                  className="mt-1 block w-full rounded-md border border-white/30 bg-white/20 px-3 py-2 
+                   text-white placeholder-gray-200 shadow-sm focus:border-pink-400 
+                   focus:ring-pink-400 focus:outline-none backdrop-blur-sm"
+                />
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                I want to
-              </label>
-              <div className="flex space-x-4">
-                <label className="flex items-center">
+            {/* 2-column layout for the rest */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {fields.slice(1).map(({ name, label, type }) => (
+                <div key={name}>
+                  <label htmlFor={name} className="block text-sm font-medium text-white">
+                    {label}
+                  </label>
                   <input
-                    type="radio"
-                    value="user"
-                    checked={formData.userType === 'user'}
-                    onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="mr-2"
+                    id={name}
+                    name={name}
+                    type={type}
+                    value={formData[name]}
+                    onChange={handleChange}
+                    required
+                    className="mt-1 block w-full rounded-md border border-white/30 bg-white/20 px-3 py-2 
+                     text-white placeholder-gray-200 shadow-sm focus:border-pink-400 
+                     focus:ring-pink-400 focus:outline-none backdrop-blur-sm"
                   />
-                  Find Services
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    value="provider"
-                    checked={formData.userType === 'provider'}
-                    onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="mr-2"
-                  />
-                  Offer Services
-                </label>
-              </div>
+                </div>
+              ))}
             </div>
+          </div>
 
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
 
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
 
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  id="phone"
-                  name="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
 
-              <div>
-                <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-                  Location
-                </label>
-                <input
-                  id="location"
-                  name="location"
-                  type="text"
-                  value={formData.location}
-                  onChange={(e) => setFormData({...formData, location: e.target.value})}
-                  className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                  placeholder="City, State"
-                />
-              </div>
-            </div>
 
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                value={formData.password}
-                onChange={(e) => setFormData({...formData, password: e.target.value})}
-                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
+          <button
+            type="submit"
+            className="w-full rounded-md bg-pink-500 px-4 py-2 text-white font-medium 
+                       hover:bg-pink-600 focus:outline-none focus:ring-2 
+                       focus:ring-pink-400 focus:ring-offset-2 focus:ring-offset-transparent"
+          >
+            Sign up
+          </button>
+        </form>
 
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
-              </label>
-              <input
-                id="confirmPassword"
-                name="confirmPassword"
-                type="password"
-                required
-                value={formData.confirmPassword}
-                onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                className="mt-1 w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-
-            <div className="flex items-center">
-              <input
-                id="terms"
-                name="terms"
-                type="checkbox"
-                required
-                className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-              />
-              <label htmlFor="terms" className="ml-2 block text-sm text-gray-900">
-                I agree to the{' '}
-                <a href="#" className="text-primary-600 hover:text-primary-500">Terms of Service</a>
-                {' '}and{' '}
-                <a href="#" className="text-primary-600 hover:text-primary-500">Privacy Policy</a>
-              </label>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
-              >
-                {loading ? 'Creating account...' : 'Create account'}
-              </button>
-            </div>
-          </form>
-        </div>
+        <p className="mt-4 text-center text-sm text-white/90">
+          Already have an account?{' '}
+          <a href="/auth/login" className="font-medium text-yellow-300 hover:text-yellow-200">
+            Sign in
+          </a>
+        </p>
       </div>
     </div>
   )

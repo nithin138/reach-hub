@@ -1,9 +1,9 @@
-// app/auth/login/page.js
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
 import { useAuth } from '../../../context/AuthContext'
 import { useRouter } from 'next/navigation'
+import { LockClosedIcon, EnvelopeIcon, KeyIcon } from '@heroicons/react/24/solid'
 
 export default function LoginPage() {
   const { login } = useAuth()
@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    userType: 'user' // user or provider
+    userType: 'user'
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -20,18 +20,10 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-
     try {
-      // In real app, this would make an API call
       await login(formData.email, formData.password, formData.userType)
-      
-      // Redirect based on user type
-      if (formData.userType === 'provider') {
-        router.push('/provider')
-      } else {
-        router.push('/user')
-      }
-    } catch (error) {
+      router.push(formData.userType === 'provider' ? '/provider' : '/user')
+    } catch {
       setError('Invalid email or password')
     } finally {
       setLoading(false)
@@ -39,123 +31,118 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-          Sign in to your account
-        </h2>
-        <p className="mt-2 text-center text-sm text-gray-600">
-          Or{' '}
-          <Link href="/auth/register" className="font-medium text-primary-600 hover:text-primary-500">
-            create a new account
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800 p-4">
+      <div className="w-full max-w-md bg-white/20 backdrop-blur-xl shadow-2xl rounded-2xl p-8 border border-white/30 animate-fadeIn">
+        <div className="text-center mb-8">
+          <div className="mx-auto h-14 w-14 rounded-full bg-indigo-200 flex items-center justify-center shadow-md">
+            <LockClosedIcon className="h-7 w-7 text-indigo-600" />
+          </div>
+          <h2 className="mt-4 text-3xl font-extrabold text-white drop-shadow-lg">
+            Welcome Back
+          </h2>
+          <p className="text-sm text-indigo-100 mt-1">
+            Sign in to your account
+          </p>
+        </div>
+
+        {error && (
+          <div className="bg-red-500/20 border border-red-400 text-red-100 px-4 py-3 rounded-lg mb-4 animate-shake">
+            {error}
+          </div>
+        )}
+
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          {/* Account Type */}
+          <div>
+            <label className="block text-sm font-medium text-indigo-100 mb-2">
+              Account Type
+            </label>
+            <div className="flex space-x-3">
+              {['user', 'provider'].map((type) => (
+                <label
+                  key={type}
+                  className={`flex items-center px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                    formData.userType === type
+                      ? 'bg-indigo-500 text-white shadow-md'
+                      : 'bg-white/10 text-indigo-100 hover:bg-white/20'
+                  }`}
+                >
+                  <input
+                    type="radio"
+                    value={type}
+                    checked={formData.userType === type}
+                    onChange={(e) =>
+                      setFormData({ ...formData, userType: e.target.value })
+                    }
+                    className="hidden"
+                  />
+                  <span className="capitalize text-sm font-medium">
+                    {type === 'user' ? 'Customer' : 'Service Provider'}
+                  </span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* Email */}
+          <div className="relative">
+            <EnvelopeIcon className="absolute left-3 top-3.5 h-5 w-5 text-indigo-300" />
+            <input
+              id="email"
+              type="email"
+              placeholder="Email address"
+              required
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="w-full pl-10 p-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-indigo-200 focus:ring-2 focus:ring-pink-400 focus:border-transparent"
+            />
+          </div>
+
+          {/* Password */}
+          <div className="relative">
+            <KeyIcon className="absolute left-3 top-3.5 h-5 w-5 text-indigo-300" />
+            <input
+              id="password"
+              type="password"
+              placeholder="Password"
+              required
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="w-full pl-10 p-3 bg-white/20 border border-white/30 rounded-lg text-white placeholder-indigo-200 focus:ring-2 focus:ring-pink-400 focus:border-transparent"
+            />
+          </div>
+
+          {/* Remember Me + Forgot */}
+          <div className="flex items-center justify-between text-sm text-indigo-100">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                className="h-4 w-4 text-pink-400 border-white/30 rounded"
+              />
+              <span>Remember me</span>
+            </label>
+            <Link href="#" className="hover:text-pink-300 font-medium transition-colors">
+              Forgot password?
+            </Link>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 rounded-lg text-white font-semibold bg-gradient-to-r from-pink-500 to-indigo-500 hover:opacity-90 shadow-lg focus:ring-2 focus:ring-offset-2 focus:ring-pink-300 disabled:opacity-50 transition"
+          >
+            {loading ? 'Signing in...' : 'Sign in'}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="mt-6 text-center text-sm text-indigo-100">
+          Don’t have an account?{' '}
+          <Link href="/auth/register" className="text-pink-300 hover:text-pink-200 font-medium transition-colors">
+            Create one
           </Link>
         </p>
-      </div>
-
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <form className="space-y-6" onSubmit={handleSubmit}>
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg">
-                {error}
-              </div>
-            )}
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Account Type
-              </label>
-              <div className="flex space-x-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    value="user"
-                    checked={formData.userType === 'user'}
-                    onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="mr-2"
-                  />
-                  Customer
-                </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    value="provider"
-                    checked={formData.userType === 'provider'}
-                    onChange={(e) => setFormData({...formData, userType: e.target.value})}
-                    className="mr-2"
-                  />
-                  Service Provider
-                </label>
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
-              </label>
-              <div className="mt-1">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
-              </label>
-              <div className="mt-1">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                />
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded"
-                />
-                <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
-                  Remember me
-                </label>
-              </div>
-
-              <div className="text-sm">
-                <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
-                  Forgot your password?
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50"
-              >
-                {loading ? 'Signing in...' : 'Sign in'}
-              </button>
-            </div>
-          </form>
-        </div>
       </div>
     </div>
   )

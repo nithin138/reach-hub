@@ -23,7 +23,7 @@ export default function ProviderDashboard() {
         totalBookings: 24,
         monthlyRevenue: 2850
       })
-      
+
       setRecentEnquiries([
         {
           id: 1,
@@ -48,17 +48,42 @@ export default function ProviderDashboard() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4">Provider Dashboard</h1>
-          <p className="text-gray-600 mb-6">Please login to access your provider dashboard.</p>
-          <Link href="/auth/login" className="btn-primary">
-            Login as Provider
-          </Link>
+      <div className="mx-auto px-6 py-16 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800  text-center">
+        <h1 className="text-4xl font-extrabold bg-gradient-to-r from-yellow-300 via-pink-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg mb-4">
+          Provider Dashboard
+        </h1>
+        <p className="text-lg text-white mb-6">
+          As a <span className="font-semibold text-purple-700">Service Provider</span>, you can
+          manage your profile, accept bookings, track your services,
+          and connect directly with customers looking for quality work.
+        </p>
+
+        <div className="p-4 rounded-lg shadow-inner mb-8 border border-white/30 bg-white/10 backdrop-blur-md">
+          <h2 className="text-xl font-bold bg-gradient-to-r from-yellow-300 via-pink-400 to-red-500 bg-clip-text text-transparent drop-shadow-lg mb-2">Why join as a provider?</h2>
+          <ul className="text-left text-gray-200 space-y-2 max-w-md mx-auto">
+            <li>✅ Expand your reach and grow your client base</li>
+            <li>✅ Manage bookings and payments in one place</li>
+            <li>✅ Get real-time notifications for new service requests</li>
+            <li>✅ Build trust with verified customer reviews</li>
+          </ul>
         </div>
+
+
+        <p className="text-white mb-8">
+          Already have a provider account? Log in now to access your personalized dashboard.
+        </p>
+
+        <Link
+          href="/auth/login"
+          className="inline-block bg-purple-600 text-white font-medium px-6 py-3 rounded-lg shadow-md 
+                   hover:bg-purple-700 hover:shadow-lg transition duration-200"
+        >
+          Login as Provider
+        </Link>
       </div>
     )
   }
+
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -100,7 +125,7 @@ export default function ProviderDashboard() {
             <p className="text-gray-600 text-sm">Add, edit, or remove your services</p>
           </div>
         </Link>
-        
+
         <Link href="/provider/enquiries" className="card group hover:shadow-md transition-all">
           <div className="text-center">
             <div className="text-4xl mb-3">💬</div>
@@ -108,7 +133,7 @@ export default function ProviderDashboard() {
             <p className="text-gray-600 text-sm">Respond to customer enquiries</p>
           </div>
         </Link>
-        
+
         <div className="card text-center opacity-50">
           <div className="text-4xl mb-3">📊</div>
           <h3 className="font-semibold text-gray-900 mb-2">Analytics</h3>
