@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useAuth } from '../../../hooks/useAuth'
+import { useAuth } from '../../../context/AuthContext'
 import Modal from '../../../components/Modal'
 
 export default function ProviderEnquiriesPage() {
