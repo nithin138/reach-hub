@@ -22,7 +22,7 @@ export default function LoginPage() {
     setError('')
     try {
       await login(formData.email, formData.password, formData.userType)
-      router.push(formData.userType === 'provider' ? '/provider' : '/user')
+      router.push(formData.userType === 'provider' ? '/provider/dashboard' : '/user')
     } catch {
       setError('Invalid email or password')
     } finally {
