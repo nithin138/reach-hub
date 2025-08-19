@@ -28,7 +28,7 @@ export default function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link href="/user/services" className="text-gray-700 hover:text-primary-600">
-              Find Services
+              Find Services and Products
             </Link>
             <Link href="/provider" className="text-gray-700 hover:text-primary-600">
               Become a Provider
@@ -88,7 +88,7 @@ export default function Navbar() {
                 className="block px-3 py-2 text-gray-700 hover:text-primary-600"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Find Services
+                Find Services and Products
               </Link>
               <Link 
                 href="/provider" 

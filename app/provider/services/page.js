@@ -122,7 +122,7 @@ export default function ProviderServicesPage() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold text-gray-900">My Services</h1>
-        <button onClick={handleAddService} className="btn-primary">Add New Service</button>
+        <button onClick={handleAddService} className="btn-primary bg-gradient-to-r from-blue-600 to-purple-600">Add New Service</button>
       </div>
 
       {loading ? (
@@ -167,7 +167,7 @@ export default function ProviderServicesPage() {
       {showAddModal && (
         <Modal isOpen={() => setShowAddModal(true)} onClose={() => setShowAddModal(false)}>
           <div className="p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">{editingService ? 'Edit Service' : 'Add New Service'}</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 ">{editingService ? 'Edit Service' : 'Add New Service'}</h3>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Service Title</label>
@@ -196,7 +196,7 @@ export default function ProviderServicesPage() {
               </div>
 
               <div className="flex gap-3 pt-4">
-                <button type="submit" className="flex-1 btn-primary">{editingService ? 'Update Service' : 'Add Service'}</button>
+                <button type="submit" className="flex-1 btn-primary bg-gradient-to-r from-blue-600 to-purple-600">{editingService ? 'Update Service' : 'Add Service'}</button>
                 <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 btn-secondary">Cancel</button>
               </div>
             </form>

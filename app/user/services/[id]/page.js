@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import Modal from '../../../../components/Modal'
-import { useAuth } from '../../../../hooks/useAuth'
+import { useAuth } from '../../../../context/AuthContext'
 
 export default function ServiceDetailPage() {
   const { id } = useParams()
